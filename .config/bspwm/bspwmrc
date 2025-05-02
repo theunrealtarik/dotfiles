@@ -1,0 +1,35 @@
+#! /bin/sh
+
+SCREEN0="HDMI-A-0"
+SCREEN1="DisplayPort-2"
+
+xrandr --output $SCREEN0 --primary --mode 1920x1080 --rotate normal
+xrandr --output $SCREEN1 --mode 1366x768 --rotate normal --right-of $SCREEN0
+
+pgrep -x sxhkd >/dev/null || sxhkd &
+
+bspc monitor $SCREEN0 -d 1 2 3
+bspc monitor $SCREEN1 -d 4 5 6
+
+bspc config border_width 1
+bspc config window_gap 1
+
+bspc config split_ratio 0.52
+bspc config borderless_monocle true
+bspc config gapless_monocle true
+# bspc config normal_border_color "#90d427"
+bspc config focused_border_color "#f9a313"
+
+# bspc rule -a Gimp desktop='^8' state=floating follow=on
+# bspc rule -a Chromium desktop='^2'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+
+sxhkd &
+picom &
+nitrogen --restore &
+
+emote &
+dmenu_run &
+flameshot &

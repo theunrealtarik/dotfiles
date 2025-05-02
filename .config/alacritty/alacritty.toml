@@ -1,0 +1,43 @@
+[colors.bright]
+black = "#808080"
+blue = "#0066ff"
+cyan = "#00ffff"
+green = "#33ff00"
+magenta = "#cc00ff"
+red = "#fe0100"
+white = "#FFFFFF"
+yellow = "#feff00"
+
+[colors.cursor]
+cursor = "#ffffff"
+text = "#F81CE5"
+
+[colors.normal]
+black = "#000000"
+blue = "#0066ff"
+cyan = "#00ffff"
+green = "#33ff00"
+magenta = "#cc00ff"
+red = "#fe0100"
+white = "#d0d0d0"
+yellow = "#feff00"
+
+[colors.primary]
+background = "#0f0f0f"
+foreground = "#ffffff"
+
+[font]
+size = 14
+
+[font.normal]
+# family = "CaskaydiaMonoNerdFont"
+# family = "JetBrainsMonoNerdFont"
+family = "ComicShannsMonoNerdFontMono"
+style = "SemiBold"
+
+[window]
+opacity = 0.95
+
+[window.padding]
+x = 10
+y = 10
