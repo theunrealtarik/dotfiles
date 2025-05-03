@@ -26,11 +26,6 @@ return {
       },
       { '<leader>qs', '<cmd>Trouble symbols toggle pinned=true win.relative=win win.position=right<CR>', desc = 'Open diagnostic workspace quickfix list' },
     },
-    config = function()
-      local config = require 'fzf-lua.config'
-      local actions = require('trouble.sources.fzf').actions
-      config.defaults.actions.files['ctrl-t'] = actions.open
-    end,
   },
   {
     'folke/which-key.nvim',
