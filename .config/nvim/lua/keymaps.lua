@@ -55,7 +55,7 @@ local keymaps = {
         vim.diagnostic.enable()
       end
     end,
-    { desc = '[D]iagnostics [T]oggle' },
+    { desc = 'Diagnostics Toggle' },
   },
 
   -- LSP
@@ -73,7 +73,7 @@ local keymaps = {
     function()
       vim.lsp.buf.format { async = false }
     end,
-    { desc = '[L]sp [F]or[m]atting' },
+    { desc = 'Lsp Formatting' },
   },
   {
     'n',
