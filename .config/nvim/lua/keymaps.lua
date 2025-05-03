@@ -1,77 +1,101 @@
--- general i guess
-vim.keymap.set('n', '<C-s>', '<cmd>write!<CR>')
-vim.keymap.set('n', '<C-z>', '<cmd>:u<CR>')
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+local keymaps = {
+  -- General
+  { 'n', '<C-s>', '<cmd>write!<CR>', { desc = 'Save File' } },
+  { 'n', '<C-z>', '<cmd>:u<CR>', { desc = 'Undo' } },
+  { 'n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear Highlighted Search' } },
+  { 'n', '<C-Q>', '<cmd>q!<CR>', { desc = '[Q]uit' } },
 
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+  -- File Tree
+  { 'n', '<leader>ft', '<cmd>NvimTreeFocus<CR>', { desc = '[F]ocus On [T]ree' } },
+  { 'n', '<leader>tt', '<cmd>NvimTreeToggle<CR>', { desc = '[T]ree [T]oggle' } },
 
-vim.keymap.set('n', '<leader>ft', '<cmd>NvimTreeFocus<CR>', { desc = '[F]ocus On [T]ree' })
-vim.keymap.set('n', '<leader>qd', '<cmd>TroubleToggle document_diagnostics<CR>', { desc = 'Open diagnostic [D]ocument [Q]uickfix list' })
-vim.keymap.set('n', '<leader>qw', '<cmd>TroubleToggle workspace_diagnostics<CR>', { desc = 'Open diagnostic [W]workspace [Q]uickfix list' })
+  -- Window Navigation
+  { 'n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' } },
+  { 'n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' } },
+  { 'n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' } },
+  { 'n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' } },
 
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+  -- Line Navigation
+  { 'n', '<C-b>', '<ESC>^i', { desc = 'Beginning of line' } },
+  { 'n', '<C-e>', '<End>', { desc = 'End of line' } },
+  { 'i', '<C-b>', '<ESC>^i', { desc = 'Beginning of line' } },
+  { 'i', '<C-e>', '<End>', { desc = 'End of line' } },
+  { 'v', '<C-b>', '<ESC>^i', { desc = 'Beginning of line' } },
+  { 'v', '<C-e>', '<End>', { desc = 'End of line' } },
 
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+  -- Terminal
+  { 't', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' } },
 
--- lsp
-vim.keymap.set('n', 'K', function()
-  vim.lsp.buf.hover()
-end, { desc = 'LSP Hover' })
+  -- Diagnostics
+  {
+    'n',
+    '<leader>]',
+    function()
+      vim.diagnostic.jump { count = 1, float = true }
+    end,
+    { desc = 'Go to next Diagnostic message' },
+  },
+  { 'n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic Error messages' } },
+  {
+    'n',
+    '<leader>lV',
+    function()
+      local v = vim.diagnostic.config().virtual_text
+      vim.diagnostic.config { virtual_text = not v }
+    end,
+    { desc = '[D]iagnostics Toggle [V]irtual [T]ext' },
+  },
+  {
+    'n',
+    '<leader>lT',
+    function()
+      if vim.diagnostic.is_enabled() then
+        vim.diagnostic.enable(false)
+      else
+        vim.diagnostic.enable()
+      end
+    end,
+    { desc = '[D]iagnostics [T]oggle' },
+  },
 
--- diagnostic
-local function toggle_diagnostics(vt)
-  local diagnostic = vim.diagnostic
+  -- LSP
+  {
+    'n',
+    'K',
+    function()
+      vim.lsp.buf.hover()
+    end,
+    { desc = 'LSP Hover' },
+  },
+  {
+    'n',
+    '<leader>lfm',
+    function()
+      vim.lsp.buf.format { async = false }
+    end,
+    { desc = '[L]sp [F]or[m]atting' },
+  },
+  {
+    'n',
+    '<leader>ih',
+    function()
+      local is_enabled = vim.lsp.inlay_hint.is_enabled {}
+      vim.lsp.inlay_hint.enable(not is_enabled)
+    end,
+    { desc = 'Toggle LSP Inlay Hints' },
+  },
 
-  if vt then
-    local v = diagnostic.config().virtual_text
-    if v then
-      vim.diagnostic.config { virtual_text = false }
-    else
-      vim.diagnostic.config { virtual_text = true }
-    end
-  else
-    local v = diagnostic.is_enabled()
-    if v then
-      vim.diagnostic.enable()
-    else
-      vim.diagnostic.enable()
-    end
-  end
+  -- Comment
+  {
+    'n',
+    '<leader>/',
+    function()
+      require('Comment.api').toggle.linewise.current()
+    end,
+    { desc = 'Toggle Comment' },
+  },
+}
+
+for _, map in ipairs(keymaps) do
+  vim.keymap.set(map[1], map[2], map[3], map[4])
 end
-
-vim.keymap.set('n', '<leader>lV', function()
-  toggle_diagnostics(true)
-end, { desc = '[D]iagnostics Toggle [V]irtual [T]ext' })
-
-vim.keymap.set('n', '<leader>lT', function()
-  toggle_diagnostics(false)
-end, { desc = '[D]iagnostics [T]oggle' })
-
-vim.keymap.set('n', '<leader>lfm', function()
-  vim.lsp.buf.format { async = false }
-end, { desc = '[L]sp [F]or[m]atting' })
-
-vim.keymap.set('n', '<C-b>', '<ESC>^i', { desc = 'End of line' })
-vim.keymap.set('n', '<C-e>', '<End>', { desc = 'Move focus to the upper window' })
-
-vim.keymap.set('i', '<C-b>', '<ESC>^i', { desc = 'End of line' })
-vim.keymap.set('i', '<C-e>', '<End>', { desc = 'Move focus to the upper window' })
-
-vim.keymap.set('v', '<C-b>', '<ESC>^i', { desc = 'End of line' })
-vim.keymap.set('v', '<C-e>', '<End>', { desc = 'Move focus to the upper window' })
-
-vim.keymap.set('n', '<leader>/', function()
-  require('Comment.api').toggle.linewise.current()
-end, { desc = 'Toggle Comment' })
-
-vim.keymap.set('n', '<C-Q>', '<cmd>q!<CR>', { desc = '[Q]uit' })
-vim.keymap.set('n', '<leader>tt', '<cmd>NvimTreeToggle<CR>', { desc = '[T]ree [T]oggle' })
-vim.keymap.set('n', '<leader>ih', function()
-  local is_enabled = vim.lsp.inlay_hint.is_enabled {}
-  vim.lsp.inlay_hint.enable(not is_enabled)
-end, { desc = 'Toggle LSP Inlay Hints' })

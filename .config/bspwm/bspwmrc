@@ -31,5 +31,4 @@ picom &
 nitrogen --restore &
 
 emote &
-dmenu_run &
 flameshot &

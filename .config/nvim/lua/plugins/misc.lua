@@ -3,26 +3,15 @@ return {
     'folke/which-key.nvim',
     event = 'VimEnter',
     keys = {
-      { '<leader>c', group = '[C]ode' },
-      { '<leader>c_', hidden = true },
-      { '<leader>d', group = '[D]ocument' },
-      { '<leader>d_', hidden = true },
-      { '<leader>h', group = '[H]arpoon' },
-      { '<leader>h_', hidden = true },
-      { '<leader>l', group = '[L]sp' },
-      { '<leader>l_', hidden = true },
-      { '<leader>r', group = '[R]ename' },
-      { '<leader>r_', hidden = true },
-      { '<leader>s', group = '[S]earch' },
-      { '<leader>s_', hidden = true },
-      { '<leader>t', group = '[T]ree' },
-      { '<leader>t_', hidden = true },
-      { '<leader>w', group = '[W]orkspace' },
-      { '<leader>w_', hidden = true },
+      { '<leader>c', group = 'Code', desc = 'code' },
+      { '<leader>d', group = 'Document', desc = 'document', hidden = true },
+      { '<leader>h', group = 'Harpoon', desc = 'harpoon', hidden = true },
+      { '<leader>l', group = 'Lsp', desc = 'lsp', hidden = true },
+      { '<leader>r', group = 'Rename', desc = 'rename', hidden = true },
+      { '<leader>s', group = 'Search', desc = 'search', hidden = true },
+      { '<leader>t', group = 'Tree', desc = 'tree', hidden = true },
+      { '<leader>w', group = 'Workspace', desc = 'workspace', hidden = true },
     },
-    config = function()
-      require('which-key').setup()
-    end,
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -67,13 +56,7 @@ return {
     tag = 'stable',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
-      require('crates').setup()
-    end,
-  },
-  {
-    'andweeb/presence.nvim',
-    config = function()
-      require('presence').setup {}
+      require('crates').setup {}
     end,
   },
   {
@@ -89,16 +72,28 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     cmd = 'Trouble',
     opts = {},
-    {
-      'ThePrimeagen/harpoon',
-      branch = 'harpoon2',
-      dependencies = { 'nvim-lua/plenary.nvim' },
-      config = function()
-        local harpoon = require 'harpoon'
-
-        harpoon:setup()
-      end,
+    keys = {
+      {
+        '<leader>qd',
+        '<cmd>Trouble diagnostics toggle<CR>',
+        desc = 'Open diagnostic document quickfix list',
+      },
+      {
+        '<leader>qf',
+        '<cmd>Trouble qflist toggle<CR>',
+        desc = 'Open quickfix list',
+      },
+      { '<leader>qs', '<cmd>Trouble symbols toggle pinned=true win.relative=win win.position=right<CR>', desc = 'Open diagnostic workspace quickfix list' },
     },
+  },
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      local harpoon = require 'harpoon'
+      harpoon:setup()
+    end,
   },
   {
     'KronsyC/nvim-license',
