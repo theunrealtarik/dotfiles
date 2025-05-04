@@ -15,18 +15,23 @@ end
 ---@field [4]? table        # Options (desc, silent, buffer, etc.)
 
 ---@type Keymap[]
+local keymaps = {}
+
+---@type Keymap[]
 local general = {
   { 'n', '<C-s>', '<cmd>write!<CR>', { desc = 'Save File' } },
   { 'n', '<C-z>', '<cmd>:u<CR>', { desc = 'Undo' } },
   { 'n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear Highlighted Search' } },
   { 'n', '<C-Q>', '<cmd>q!<CR>', { desc = 'Quit' } },
 }
+vim.list_extend(keymaps, general)
 
 ---@type Keymap[]
 local filetree = {
   { 'n', '<leader>ft', '<cmd>NvimTreeFocus<CR>', { desc = '[F]ocus On [T]ree' } },
   { 'n', '<leader>tt', '<cmd>NvimTreeToggle<CR>', { desc = '[T]ree [T]oggle' } },
 }
+vim.list_extend(keymaps, filetree)
 
 ---@type Keymap[]
 local navigation = {
@@ -73,11 +78,13 @@ local navigation = {
     { desc = 'Harpoon Nnext' },
   },
 }
+vim.list_extend(keymaps, navigation)
 
 ---@type Keymap[]
 local terminal = {
   { 't', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' } },
 }
+vim.list_extend(keymaps, terminal)
 
 ---@type Keymap[]
 local diagnostics = {
@@ -112,6 +119,7 @@ local diagnostics = {
     { desc = 'Diagnostics Toggle' },
   },
 }
+vim.list_extend(keymaps, diagnostics)
 
 ---@type Keymap[]
 local lsp = {
@@ -141,6 +149,7 @@ local lsp = {
     { desc = 'Toggle LSP inlay hints' },
   },
 }
+vim.list_extend(keymaps, lsp)
 
 ---@type Keymap[]
 local comment = {
@@ -153,6 +162,7 @@ local comment = {
     { desc = 'Toggle comment' },
   },
 }
+vim.list_extend(keymaps, comment)
 
 ---@type Keymap[]
 local rust = {
@@ -189,35 +199,45 @@ local rust = {
     {},
   },
 }
+vim.list_extend(keymaps, rust)
 
 ---@type Keymap[]
 local telescope = {
-  { 'n', '<C-p>', builtin.find_files, { desc = 'Search Files' } },
-  { 'n', '<leader>sh', builtin.help_tags, { desc = 'Search Help' } },
-  { 'n', '<leader>sk', builtin.keymaps, { desc = 'Search Keymaps' } },
-  { 'n', '<leader>ss', builtin.builtin, { desc = 'Search Select Telescope' } },
-  { 'n', '<leader>sw', builtin.grep_string, { desc = 'Search current Word' } },
-  { 'n', '<leader>sg', builtin.live_grep, { desc = 'Search by Grep' } },
-  { 'n', '<leader>sd', builtin.diagnostics, { desc = 'Search Diagnostics' } },
-  { 'n', '<leader>sr', builtin.resume, { desc = 'Search Resume' } },
-  { 'n', '<leader>s.', builtin.oldfiles, { desc = 'Search Recent Files ("." for repeat)' } },
+  -- { 'n', '<C-p>', builtin.git_files, { desc = 'Search git files' } },
+  { 'n', '<C-p>', builtin.find_files, { desc = 'Search files' } },
+  { 'n', '<leader>sh', builtin.help_tags, { desc = 'Search help' } },
+  { 'n', '<leader>sk', builtin.keymaps, { desc = 'Search keymaps' } },
+  { 'n', '<leader>ss', builtin.builtin, { desc = 'Search select telescope' } },
+  { 'n', '<leader>sw', builtin.grep_string, { desc = 'Search current word' } },
+  { 'n', '<leader>sg', builtin.live_grep, { desc = 'Search by grep' } },
+  { 'n', '<leader>sd', builtin.diagnostics, { desc = 'Search diagnostics' } },
+  { 'n', '<leader>sr', builtin.resume, { desc = 'Search resume' } },
+  { 'n', '<leader>s.', builtin.oldfiles, { desc = 'Search recent files ("." for repeat)' } },
   { 'n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' } },
 }
+vim.list_extend(keymaps, telescope)
 
 ---@type Keymap[]
-local keymaps = {}
+local debugging = {
+  { 'n', '<leader>db', '<cmd>DapToggleBreakpoint<cr>', { desc = 'Debugger toggle breakpoint' } },
+  { 'n', '<leader>dl', '<cmd>DapStepInto<CR>', { desc = 'Debugger step into' } },
+  { 'n', '<leader>dj', '<cmd>DapStepOver<CR>', { desc = 'Debugger step over' } },
+  { 'n', '<leader>dk', '<cmd>DapStepOut<CR>', { desc = 'Debugger step out' } },
+  { 'n', '<leader>dc', '<cmd>DapContinue<CR>', { desc = 'Debugger continue' } },
+  {
+    'n',
+    '<leader>di',
+    function()
+      local widgets = require 'dap.ui.widgets'
+      local sidebar = widgets.sidebar(widgets.scopes)
+      sidebar.open()
+    end,
+    { desc = 'Open debugging inspector sidebar' },
+  },
+}
+vim.list_extend(keymaps, debugging)
 
-vim.list_extend(keymaps, general)
-vim.list_extend(keymaps, filetree)
-vim.list_extend(keymaps, navigation)
-vim.list_extend(keymaps, terminal)
-vim.list_extend(keymaps, diagnostics)
-vim.list_extend(keymaps, lsp)
-vim.list_extend(keymaps, comment)
-vim.list_extend(keymaps, rust)
-vim.list_extend(keymaps, telescope)
-vim.list_extend(keymaps, harpoon)
-
+---
 for _, map in ipairs(keymaps) do
   vim.keymap.set(map[1], map[2], map[3], map[4])
 end

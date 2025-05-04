@@ -61,5 +61,13 @@ alias logout="loginctl terminate-user $(whoami)"
 alias vimconf="nvim ~/.config/nvim/"
 alias vim="nvim"
 alias vi="vi"
+alias grep="ripgrep"
 
 export PATH=$PATH:/home/tarik/.spicetify
+
+# bun completions
+[ -s "/home/tarik/.bun/_bun" ] && source "/home/tarik/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
