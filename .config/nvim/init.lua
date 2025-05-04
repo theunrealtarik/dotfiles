@@ -1,5 +1,3 @@
-vim.deprecate = function() end
-
 -- basic setup
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -58,7 +56,6 @@ require('lazy').setup({
   { import = 'plugins.lang' },
   { import = 'plugins.ui' },
   { import = 'plugins.tools' },
-  -- { import = 'plugins.debug' },
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
@@ -79,4 +76,23 @@ require('lazy').setup({
   },
 })
 
-require 'keymaps'
+local function load_modules()
+  local custom_dir = vim.fn.stdpath 'config' .. '/lua/custom/'
+  local scan = vim.loop.fs_scandir(custom_dir)
+  if not scan then
+    return
+  end
+
+  while true do
+    local name, type = vim.loop.fs_scandir_next(scan)
+    if not name then
+      break
+    end
+    if type == 'file' and name:sub(-4) == '.lua' and name ~= 'init.lua' then
+      local module = 'custom.' .. name:sub(1, -5)
+      pcall(require, module)
+    end
+  end
+end
+
+load_modules()
