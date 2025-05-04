@@ -17,25 +17,20 @@ return {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = true,
-    -- use opts = {} for passing setup options
-    -- this is equalent to setup({}) function
   },
   {
     'kylechui/nvim-surround',
-    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    version = '*',
     event = 'VeryLazy',
     config = function()
       require('nvim-surround').setup()
     end,
   },
-
   {
     'KronsyC/nvim-license',
     opts = function()
       return {
         name = 'theunrealtarik',
-        -- Optional
-        -- year = "2023"
       }
     end,
 

@@ -59,5 +59,7 @@ alias shttp="python3 -m http.server"
 alias ls="ls --color"
 alias logout="loginctl terminate-user $(whoami)"
 alias vimconf="nvim ~/.config/nvim/"
+alias vim="nvim"
+alias vi="vi"
 
 export PATH=$PATH:/home/tarik/.spicetify
