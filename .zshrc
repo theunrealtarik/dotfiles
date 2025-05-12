@@ -58,10 +58,12 @@ alias basegit="echo https://github.com/"
 alias shttp="python3 -m http.server"
 alias ls="ls --color"
 alias logout="loginctl terminate-user $(whoami)"
-alias vimconf="nvim ~/.config/nvim/"
 alias vim="nvim"
 alias vi="vi"
-alias grep="ripgrep"
+# alias grep="ripgrep"
+alias ls="lsd"
+
+alias dotfiles="subl $HOME/.dotfiles/"
 
 export PATH=$PATH:/home/tarik/.spicetify
 

@@ -1,11 +1,9 @@
 [Default Applications]
 application/octet-stream=mousepad.desktop
 application/pdf=qpdfview.desktop
-application/pdf=qpdfview.desktop
 application/x-gettext-translation=mousepad.desktop
 application/xml=mousepad.desktop
 application/x-wine-extension-ini=mousepad.desktop
-image/gif=viewnior.desktop;gimp.desktop
 image/gif=viewnior.desktop;gimp.desktop
 image/jpeg=viewnior.desktop;gimp.desktop
 image/png=viewnior.desktop;gimp.desktop
@@ -17,3 +15,14 @@ video/x-ms-wmv=vlc.desktop
 video/x-ogm+ogg=vlc.desktop
 video/x-theora+ogg=vlc.desktop
 x-scheme-handler/discord=vesktop.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+text/html=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/postman=Postman.desktop
+
+[Added Associations]
+x-scheme-handler/http=xfce4-web-browser.desktop;
+x-scheme-handler/https=xfce4-web-browser.desktop;
+
