@@ -11,5 +11,5 @@ killall -q polybar
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 # Launch the bar
-polybar -r primary -c "$DIR"/config.ini &
-polybar -r secondary -c "$DIR"/config.ini &
+polybar -q primary -c "$DIR"/config.ini &
+polybar -q secondary -c "$DIR"/config.ini &
