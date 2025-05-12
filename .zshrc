@@ -60,8 +60,8 @@ alias ls="ls --color"
 alias logout="loginctl terminate-user $(whoami)"
 alias vim="nvim"
 alias vi="vi"
-# alias grep="ripgrep"
 alias ls="lsd"
+alias neofetch="fastfetch"
 
 alias dotfiles="subl $HOME/.dotfiles/"
 
