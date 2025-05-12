@@ -44,6 +44,12 @@ return {
         cmdline = {
           view = 'cmdline',
         },
+        routes = {
+          {
+            view = "notify",
+            filter = { event = "msg_showmode" },
+          },
+        },
         lsp = {
           progress = {
             enabled = false,
