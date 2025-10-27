@@ -28,8 +28,7 @@ bspc rule -a Screenkey manage=off
 sxhkd &
 picom &
 nitrogen --restore &
-
-../polybar/launch.sh &
-
 emote &
 flameshot &
+
+sh ~/.config/polybar/launch.sh
