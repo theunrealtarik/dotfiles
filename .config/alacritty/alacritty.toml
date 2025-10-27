@@ -1,0 +1,19 @@
+[colors.cursor]
+cursor = "#ffffff"
+text = "#F81CE5"
+
+[font]
+size = 16
+
+[font.normal]
+# family = "CaskaydiaMonoNerdFont"
+# family = "JetBrainsMonoNerdFont"
+family = "ComicShannsMonoNerdFontMono"
+style = "SemiBold"
+
+[window]
+opacity = 0.95
+
+[window.padding]
+x = 10
+y = 10
