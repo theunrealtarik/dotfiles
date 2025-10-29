@@ -1,4 +1,3 @@
-
 # close window
 super + lat + End
     bspc window -c
@@ -90,6 +89,14 @@ super + {o,i}
 # focus or send to the given desktop
 ctrl + alt + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
+
+
+# scroll through desktops
+super + Left
+	bspc desktop -f prev.local
+
+super + Right
+	bspc desktop -f next.local
 
 #
 # preselect
