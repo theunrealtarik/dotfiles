@@ -51,7 +51,7 @@ return {
   },
   {
     'vyfor/cord.nvim',
-    event = 'VeryLazy',
-    opts = {},
-  },
+    build = ':Cord update',
+    -- opts = {}
+  }
 }

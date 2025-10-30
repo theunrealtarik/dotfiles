@@ -48,4 +48,4 @@ local function toggle_terminal()
   end
 end
 
-vim.keymap.set({ 'n', 'i' }, '<C-t>', toggle_terminal, { desc = 'Toggle a floating terminal' })
+-- vim.keymap.set({ 'n', 'i' }, '<C-t>', toggle_terminal, { desc = 'Toggle a floating terminal' })
