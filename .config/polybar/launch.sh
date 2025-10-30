@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 
-# Add this script to your wm startup file.
-
 DIR="$HOME/.config/polybar"
-
-# Terminate already running bar instances
 killall -q polybar
-
-# Wait until the processes have been shut down
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
+MONITORS=$(polybar --list-monitors | cut -d":" -f1)
+
+PRIMARY=$(echo "$MONITORS" | head -n1)
+SECONDARY=$(echo "$MONITORS" | tail -n1)
+
 # Launch the bar
-polybar -q primary -c "$DIR"/config.ini &
-polybar -q secondary -c "$DIR"/config.ini &
+
+
+if [[ "$PRIMARY" == "$SECONDARY" ]]; then
+    # Only one monitor
+    MONITOR=$PRIMARY polybar primary -c "$DIR"/config.ini &
+else
+    MONITOR=$PRIMARY polybar primary -c "$DIR"/config.ini &
+    MONITOR=$SECONDARY polybar secondary -c "$DIR"/config.ini &
+fi
