@@ -61,6 +61,8 @@ class Warehouse:
 
         with open(path, "r") as content:
             for name in content.read().split("\n"):
+                if len(name) == 0:
+                    continue
                 packages.append(Package(name, manager))
 
         return cls(manager, packages)
