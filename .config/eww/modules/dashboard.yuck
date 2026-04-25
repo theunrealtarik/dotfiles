@@ -427,14 +427,12 @@
       :space-evenly false
       :spacing 5
       :valign "start"
-      :orientation "v"
-      ; Home
-      (disk_line
-        :mount {pulse.disk["/dev/sdb2"].partitions["/home"].mount_point}
-        :usage {pulse.disk["/dev/sdb2"].partitions["/home"].usage.raw}
-      )
-
+      :orientation "v" 
       ; Other
+      (disk_line
+        :mount {pulse.disk["/dev/sdc1"].partitions["/mnt/sdc1"].mount_point}
+        :usage {pulse.disk["/dev/sdc1"].partitions["/mnt/sdc1"].usage.raw}
+      )
       (disk_line
         :mount {pulse.disk["/dev/sdd2"].partitions["/mnt/sdd2"].mount_point}
         :usage {pulse.disk["/dev/sdd2"].partitions["/mnt/sdd2"].usage.raw}
