@@ -7,5 +7,6 @@ lazy-lock.json
 **/*/node_modules
 **/*/bun.lock
 **/*/.env
+**/*/test.py
 .config/spotify/prefs
 .config/spotify/Users

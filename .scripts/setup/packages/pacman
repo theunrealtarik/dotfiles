@@ -3,6 +3,8 @@ python-pip
 python-dotenv
 python-requests
 base-devel
+cpio
+cmake
 git
 xf86-video-amdgpu
 mesa
@@ -24,3 +26,4 @@ archlinux-xdg-menu
 openssh
 net-tools
 networkmanager
+flatpak

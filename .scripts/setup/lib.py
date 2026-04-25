@@ -4,11 +4,15 @@ import sys
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from shutil import ExecError
 from typing import List, Optional
 
 import utils
 
 FAILED_PACKAGES: list["Package"] = []
+
+
+HYPRLAND_PLUGINS = ["https://github.com/zjeffer/split-monitor-workspaces"]
 
 
 class Manager(Enum):
@@ -134,14 +138,41 @@ class Command:
             cmd = ["sudo", *cmd]
         return cmd
 
-    def run(self, cwd: Optional[Path] = None, live: bool = False):
+    def pipe(self, cmd: "Command") -> CommandResult:
+        try:
+            p1 = subprocess.Popen(self.to_list(), stdout=subprocess.PIPE)
+            p2 = subprocess.Popen(
+                cmd.to_list(),
+                stdin=p1.stdout,
+                stdout=subprocess.PIPE,
+            )
+
+            output = p2.communicate()[0]
+            if p1.wait() != 0 or p2.wait() != 0:
+                return CommandResult(
+                    None,
+                    None,
+                    1,
+                    error=f"failed to pipe {self} to {cmd}",
+                )
+            else:
+                return CommandResult(
+                    stderr=None,
+                    stdout=output.decode("utf-8"),
+                    returncode=0,
+                    error=None,
+                )
+        except Exception as e:
+            return CommandResult(None, None, 1, error=str(e))
+
+    def run(self, cwd: Optional[Path] = None, live: bool = False, check: bool = False):
         try:
             if not live:
                 p = subprocess.run(
                     self.to_list(),
                     capture_output=True,
                     text=True,
-                    check=False,
+                    check=check,
                     cwd=cwd,
                 )
 

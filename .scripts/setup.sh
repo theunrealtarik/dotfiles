@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python3 ./setup/__main__.py
+python3 ~/.dotfiles/.scripts/setup/__main__.py

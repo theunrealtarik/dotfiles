@@ -40,11 +40,15 @@ PATH_WEATHER_CACHE_FMT = PATH_WEATHER_CACHE.joinpath("fmt.json")
 with open(PATH_ENV_FILE, "r") as f:
     env = f.read()
     for line in env.split("\n"):
+        if len(line) == 0:
+            continue
+
         key, value = line.split("=")
         if key == "API_KEY":
             ENV_API_KEY = value
         if key == "CITY_ID":
             ENV_CITY_ID = value
+
 
 if ENV_API_KEY is None and ENV_CITY_ID is None:
     print("failed to load environment variables")
@@ -92,7 +96,7 @@ def fetch_weather() -> Optional[dict]:
 
     url = f"http://api.openweathermap.org/data/2.5/weather?APPID={ENV_API_KEY}&id={ENV_CITY_ID}&units=metric"
     response = requests.get(url)
-
+    print(url)
     if response.status_code == 200:
         data = response.json()
         data["timestamp"] = time.time()

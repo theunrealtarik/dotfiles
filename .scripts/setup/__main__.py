@@ -6,7 +6,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 import utils
-from lib import FAILED_PACKAGES, Command, Manager, Package, Warehouse
+from lib import FAILED_PACKAGES, HYPRLAND_PLUGINS, Command, Manager, Package, Warehouse
 
 TEMP_PATH = Path("/tmp")
 UBIN_PATH = Path("/usr/bin")
@@ -73,9 +73,9 @@ def setup():
                 f"https://github.com/theunrealtarik/{PULSE_REPO_NAME}",
                 str(PULSE_TEMP_PATH),
             ],
-        ).run()
+        ).run(live=True)
 
-    Command('RUSTFLAGS="-Awarnings" cargo build --release').run(
+    Command("cargo build --release").run(
         cwd=PULSE_TEMP_PATH,
         live=True,
     )
@@ -83,8 +83,21 @@ def setup():
     Command(f"sudo cp {PULSE_TRGT_UBIN} {PULSE_UBIN_PATH}").run()
     Command(f"sudo chmod +x {PULSE_UBIN_PATH}").run()
 
-    utils.log("setting up bun")
-    Command("curl -fsSL https://bun.sh/install | bash").run()
+    utils.log("Setting up bun")
+    Command(
+        bin="curl",
+        args=[
+            "-fsSL",
+            "https://bun.com/install",
+        ],
+    ).pipe(Command("bash"))
+
+    utils.log("Setting up hyprland plugins")
+    Command("hyprpm update").run(live=True)
+    for plugin in HYPRLAND_PLUGINS:
+        Command(f"hyprpm add {plugin}").run()
+        Command(f"hyprpm enable {plugin}").run()
+    Command("hyprpm reload")
 
 
 def wrap():
