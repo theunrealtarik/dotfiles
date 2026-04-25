@@ -39,14 +39,13 @@
 )
 
 (defpoll refresh_weather_data
-  :interval "30m"
-  `python scripts/weather.py --getdata`
+  :interval "35m"
+  `python scripts/weather.py --fetch`
 )
 
 (defpoll weather_icon   :interval "30m" `python scripts/weather.py --icon`)
 (defpoll weather_temp   :interval "30m" `python scripts/weather.py --temp`)
-(defpoll weather_hex    :interval "30m" `python scripts/weather.py --hex`)
-(defpoll weather_stat   :interval "30m" `python scripts/weather.py --stat`)
+(defpoll weather_stat   :interval "30m" `python scripts/weather.py --status`)
 (defpoll weather_quote  :interval "30m" `python scripts/weather.py --quote`)
 
 (defwidget weather []
@@ -95,7 +94,7 @@
           :valign "center"
           (label :class "date" :text {formattime(EWW_TIME, "%A, %d %B")})
         )
-        
+
       )
     )
     (box
@@ -155,7 +154,7 @@
         :visible {pulse.net.default.connection != "wired"}
       )
     )
-    
+
     (bar
       :class "signal-strength"
       :value {pulse.net.default.connection.wireless.signal.quality}
@@ -194,7 +193,7 @@
         )
       )
     )
-    
+
   )
 )
 
@@ -209,7 +208,7 @@
     :orientation "v"
     :space-evenly false
     :spacing 10
-    
+
     ; CPU
     (box
       :orientation "v"
@@ -259,7 +258,7 @@
         (label :text {core_wave})
       )
     )
-    
+
     (box
       :space-evenly true
       :spacing 10
@@ -434,7 +433,7 @@
         :mount {pulse.disk["/dev/sdb2"].partitions["/home"].mount_point}
         :usage {pulse.disk["/dev/sdb2"].partitions["/home"].usage.raw}
       )
-      
+
       ; Other
       (disk_line
         :mount {pulse.disk["/dev/sdd2"].partitions["/mnt/sdd2"].mount_point}

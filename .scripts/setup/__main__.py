@@ -12,6 +12,7 @@ TEMP_PATH = Path("/tmp")
 UBIN_PATH = Path("/usr/bin")
 
 PARU_BIN = Path("/usr/bin/paru")
+PACMAN_BIN = Path("/usr/bin/pacman")
 
 CURR_DIR_PATH = Path(__file__).parent
 PACMAN_PACKAGES_PATH = CURR_DIR_PATH.joinpath("./packages/pacman")
@@ -24,8 +25,14 @@ if not (PACMAN_PACKAGES_PATH.exists() and PARU_PACKAGES_PATH.exists()):
 
 
 def install_system_packages():
-    Warehouse.from_list(PACMAN_PACKAGES_PATH, Manager.Pacman).install_all()
-    Warehouse.from_list(PARU_PACKAGES_PATH, Manager.Paru).install_all()
+    if PACMAN_BIN.exists():
+        Warehouse.from_list(PACMAN_PACKAGES_PATH, Manager.Pacman).install_all()
+    else:
+        utils.error("pacman was not found")
+    if PARU_BIN.exists():
+        Warehouse.from_list(PARU_PACKAGES_PATH, Manager.Paru).install_all()
+    else:
+        utils.error("paru was not found")
 
 
 def setup():
@@ -76,6 +83,9 @@ def setup():
     Command(f"sudo cp {PULSE_TRGT_UBIN} {PULSE_UBIN_PATH}").run()
     Command(f"sudo chmod +x {PULSE_UBIN_PATH}").run()
 
+    utils.log("setting up bun")
+    Command("curl -fsSL https://bun.sh/install | bash").run()
+
 
 def wrap():
     if len(FAILED_PACKAGES) != 0:
@@ -118,10 +128,6 @@ class Stage:
         self.__dispatch()
 
 
-def testing():
-    pass
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -129,7 +135,6 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-
     stages = [
         Stage(
             name="packages",
