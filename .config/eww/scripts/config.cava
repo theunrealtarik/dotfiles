@@ -1,0 +1,9 @@
+[general]
+bars = 20
+
+[output]
+method = raw
+raw_target = /dev/stdout
+data_format = ascii
+channels = mono
+ascii_max_range = 7

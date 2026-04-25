@@ -1,0 +1,73 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    },
+  },
+
+  // VIM
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "escape": "vim::SwitchToNormalMode",
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-b": "vim::StartOfLine",
+      "ctrl-e": "vim::EndOfLine",
+      // "space h a": "quickopen:add-to-favorites",
+      // "space h m": "quickopen:toggle-menu",
+      // "space h p": "quickopen:prev",
+      // "space h n": "quickopen:next",
+      // "space h 1": ["quickopen:select", 1],
+      // "space h 2": ["quickopen:select", 2],
+      // "space h 3": ["quickopen:select", 3],
+      // "escape escape": "terminal:exit",
+      "space ]": "editor::GoToDiagnostic",
+      // "space e": "diagnostics:openFloat",
+      // "space l v": "diagnostics:toggleVirtualText",
+      // "space l t": "diagnostics:toggle",
+      // "K": "lsp:hover",
+      // "space l f m": "lsp:format",
+      // "space i h": "lsp:toggleInlayHints",
+      "space /": "editor::ToggleComments",
+      // "space c a": "rust:codeAction",
+      // "space o t": "rust:openCargoToml",
+      // "space o d": "rust:openDocs",
+      // "space j l": "rust:joinLines",
+      // "space f t": "project_panel::FocusSelectedEntry",
+      // "space t t": "project_panel::Toggle",
+      // "ctrl-p": "quickOpen:show",
+      // "space s h": "search:helpTags",
+      // "space s k": "search:keymaps",
+      // "space s s": "search:all",
+      // "space s w": "search:currentWord",
+      // "space s g": "search:grep",
+      // "space s d": "search:diagnostics",
+      // "space s r": "search:resume",
+      // "space s .": "search:recentFiles",
+      // "space space": "buffers:list",
+      // "space d b": "debug:toggleBreakpoint",
+      // "space d l": "debug:stepInto",
+      // "space d j": "debug:stepOver",
+      // "space d k": "debug:stepOut",
+      // "space d c": "debug:continue",
+      // "space d i": "debug:openInspector",
+    },
+  },
+]

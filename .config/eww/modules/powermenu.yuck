@@ -1,0 +1,83 @@
+(defpoll current_screen :interval 60 `hyprctl monitors -j | jq -r '.[] | select(.focused == true).id'`)
+(defpoll hostname :interval 60000 :initial `hostname` `hostname`)
+
+(defwindow powerconfirm [cmd]
+  :class "powerconfirm"
+  :geometry (geometry :x "50%"
+    :y "40%"
+    :width "300px"
+  :anchor "center")
+  :stacking "fg"
+  :windowtype "dock"
+  :wm-ignore false
+  (box
+    :orientation "vertical"
+    :valign "baseline"
+    :spacing 10
+    :vexpand false
+    (label :class "confirm-label" :text cmd)
+    (box
+      :class "confirm-options"
+      :orientation "horizontal"
+      :valign "start"
+      :spacing 10
+      (eventbox
+        :cursor "pointer"
+        :onclick cmd
+        (button :onclick cmd (label :text "✔ Yes")))
+      (eventbox
+        :cursor "pointer"
+        :onclick "eww close powerconfirm"
+        (button :onclick "eww close powerconfirm"
+          (label :text "✖ No")
+        )
+      )
+    )
+  )
+)
+
+(defwidget powerbutton [icon cmd]
+  (eventbox
+    :class "power-option"
+    :cursor "pointer"
+    :onclick "eww close powermenu; eww open powerconfirm --screen ${current_screen} --toggle --arg cmd=\"${cmd}\""
+    (label :class "power-button" :text icon)
+  )
+)
+
+(defwindow powermenu
+  :class "powermenu"
+  :geometry (geometry :x "50%"
+    :y "40%"
+  :anchor "center")
+  :stacking "fg"
+  :reserve (struts :distance "40px" :side "top")
+  :windowtype "dock"
+  :wm-ignore false
+  (box
+    :orientation "horizontal"
+    :valign "baseline"
+    :spacing 10
+    :space-evenly true
+    (powerbutton
+      :icon "⏻"
+      :cmd "systemctl poweroff"
+    )
+    (powerbutton
+      :icon "󰑖"
+      :cmd "systemctl reboot"
+    )
+    (powerbutton
+      :icon "󰒲"
+      :cmd "systemctl suspend"
+    )
+    (powerbutton
+      :icon "󰍃"
+      :cmd "hyprctl dispatch exit"
+    )
+    ; (powerbutton
+      ;   :icon ""
+      ;   :cmd "hyprlock & disown; eww close powerconfirm"
+    ; )
+  )
+)

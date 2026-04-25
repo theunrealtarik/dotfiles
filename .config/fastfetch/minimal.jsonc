@@ -1,0 +1,48 @@
+// Minimal fastfetch config: only includes Distro, Kernel, WM,
+// Terminal, Uptime, and Packages as requested.
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "small", // auto, builtin, small, file, etc.
+    "source": "arch",
+    "padding": {
+      "top": 0,
+      "left": 5,
+      "right": 5
+    },
+    "color": {
+      "1": "#D16558",
+      "2": "#745f5f"
+    }
+  },
+  "display": {
+    "separator": " "
+  },
+  "modules": [
+    {
+      "type": "os",
+      "key": "{icon}"
+    },
+    {
+      "type": "kernel",
+      "key": ""
+    },
+    {
+      "type": "wm",
+      "key": ""
+    },
+    {
+      "type": "terminal",
+      "key": ""
+    },
+    {
+      "type": "uptime",
+      "key": "󰅐"
+    },
+    {
+      "type": "packages",
+      "key": ""
+    },
+    "break"
+  ]
+}

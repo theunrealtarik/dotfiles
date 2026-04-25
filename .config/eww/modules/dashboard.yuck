@@ -1,0 +1,487 @@
+(defvar card_img "static/card.png")
+(defpoll uptime :interval "1m"
+  `uptime -p | cut -d' ' -f2-`
+)
+
+(defwidget bar [class value]
+  (box
+    :valgin "center"
+    :halgin "center"
+    :space-evenly false
+    (box
+      :class "bar ${class}"
+      :orientation "h"
+      :space-evenly "false"
+      (scale :min 0 :max 100 :value {value})
+    )
+  )
+)
+
+(defwidget card []
+  (box
+    :class "cell card"
+    :width 420
+    :space-evenly false
+    (box
+      :style "background-image: url('${card_img}');"
+      :class "card-img"
+      :orientation "v"
+      :space-evenly false
+      (box
+        :class "uptime"
+        :orientation "h"
+        :halign "end"
+        :valign "end"
+        (label :text {uptime})
+      )
+    )
+  )
+)
+
+(defpoll refresh_weather_data
+  :interval "30m"
+  `python scripts/weather.py --getdata`
+)
+
+(defpoll weather_icon   :interval "30m" `python scripts/weather.py --icon`)
+(defpoll weather_temp   :interval "30m" `python scripts/weather.py --temp`)
+(defpoll weather_hex    :interval "30m" `python scripts/weather.py --hex`)
+(defpoll weather_stat   :interval "30m" `python scripts/weather.py --stat`)
+(defpoll weather_quote  :interval "30m" `python scripts/weather.py --quote`)
+
+(defwidget weather []
+  (box
+    :class "cell weather"
+    :orientation "v"
+    :width 280
+    :height 150
+    :space-evenly false
+    (box
+      :space-evenly false
+      :orientation "v"
+      (box
+        :space-evenly true
+        :class "top"
+        (box
+          :orientation "h"
+          :space-evenly false
+          :halign "start"
+          :valign "center"
+          (label :class "icon" :text {weather_icon})
+          (label :class "temp" :text {weather_temp})
+        )
+        (box
+          :orientation "v"
+          :space-evenly false
+          :halign "end"
+          :valign "center"
+          (label :class "time" :text {formattime(EWW_TIME, "%H:%M")})
+        )
+      )
+      (box
+        :space-evenly true
+        (box
+          :orientation "h"
+          :space-evenly false
+          :halign "start"
+          :valign "center"
+          :class "top"
+          (label :class "stat" :text {weather_stat})
+        )
+        (box
+          :orientation "v"
+          :space-evenly false
+          :halign "end"
+          :valign "center"
+          (label :class "date" :text {formattime(EWW_TIME, "%A, %d %B")})
+        )
+        
+      )
+    )
+    (box
+      :halign "center"
+      :valign "center"
+      :class "quote"
+      (label :text {weather_quote})
+    )
+  )
+)
+
+(defpoll net
+  :interval "1s"
+  `python scripts/net.py`
+)
+
+
+(defwidget network []
+  (box
+    :class "cell network"
+    :orientation "v"
+    :width 140
+    :height 175
+    :space-evenly false
+    :spacing 10
+    (box
+      :space-evenly false
+      (label :class "icon" :text {pulse.net.default.connection == "Wired" ? "󰈀 " : " "})
+      (box
+        :class "ip"
+        :space-evenly false
+        :spacing 10
+        :halign "start"
+        (label :text {pulse.net.default.ip})
+      )
+    )
+    (box
+      :space-evenly false
+      :spacing 10
+      :halign "start"
+      (box
+        :class "ip"
+        :halign "start"
+        :space-evenly false
+        (label
+          :class "ssid"
+          :text {pulse.net.default.connection == "wired" ? pulse.net.default.name : pulse.net.default.connection.wireless.ssid}
+        )
+      )
+      (label
+        :text ""
+        :style "font-size: 6px"
+        :visible {pulse.net.default.connection != "wired"}
+      )
+      (label
+        :text {pulse.net.default.name}
+        :visible {pulse.net.default.connection != "wired"}
+      )
+    )
+    
+    (bar
+      :class "signal-strength"
+      :value {pulse.net.default.connection.wireless.signal.quality}
+    )
+    (box
+      :space-evenly false
+      :orientation "h"
+      :class "stats"
+      (box
+        :halign "start"
+        :hexpand false
+        :visible {pulse.net.default.connection != "wired"}
+        (label :text "${pulse.net.default.connection.wireless.signal.value} dBm")
+      )
+      (box
+        :halign "fill"
+        :hexpand true
+        :space-evenly true
+        :width "100%"
+        (box
+          :space-evenly false
+          :spacing 10
+          :halign "end"
+          (box
+            :space-evenly false
+            :spacing 5
+            (label :class "stat-icon" :text "")
+            (label :class "stat-value" :text {pulse.net.default.stats.rx.formatted})
+          )
+          (box
+            :space-evenly false
+            :spacing 5
+            (label :class "stat-icon" :text "")
+            (label :class "stat-value" :text {pulse.net.default.stats.tx.formatted})
+          )
+        )
+      )
+    )
+    
+  )
+)
+
+(deflisten core_wave
+  :initial "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
+  `pulse --only cpu --refresh cpu:15s | jq -c '[.cpu.cores[].raw]' | python scripts/wave.py cores`
+)
+
+(defwidget system []
+  (box
+    :class "cell system"
+    :orientation "v"
+    :space-evenly false
+    :spacing 10
+    
+    ; CPU
+    (box
+      :orientation "v"
+      :space-evenly false
+      :spacing 10
+      :hexpand true
+      :class "module cpu"
+      (box
+        :space-evenly true
+        (box
+          :halign "start"
+          :space-evenly false
+          :spacing 10
+          (label
+            :class "icon"
+            :text {pulse.cpu.arch == "x86_64" ? "󰻠" : "󰻟"}
+          )
+          (label :class "info" :text {pulse.cpu.usage.formatted})
+          (label :class "info" :text {pulse.cpu.temp.formatted})
+        )
+        (box
+          :space-evenly false
+          :halign "end"
+          :spacing 10
+          (box
+            :halign "end"
+            :space-evenly false
+            :spacing 1
+            (label :class "load-icon" :text "L1:")
+            (label :class "load-value" :text {round(pulse.load.one.normalized, 2)})
+          )
+          (box
+            :halign "end"
+            :space-evenly false
+            :spacing 1
+            (label :class "load-icon" :text "L5:")
+            (label :class "load-value" :text {round(pulse.load.five.normalized, 2)})
+          )
+        )
+      )
+      (box
+        :orientation "h"
+        :space-evenly true
+        :halign "center"
+        :hexpand true
+        :class "cores"
+        (label :text {core_wave})
+      )
+    )
+    
+    (box
+      :space-evenly true
+      :spacing 10
+      ; GPU
+      (box
+        :space-evenly false
+        :spacing 5
+        :orientation "v"
+        :class "module gpu"
+        (box
+          :halign "start"
+          (label
+            :class "title"
+            :text "GPU"
+          )
+        )
+        (box
+          :space-evenly false
+          :spacing 4
+          :orientation "v"
+          (box
+            :halign "start"
+            :space-evenly false
+            :spacing 10
+            :class "label"
+            (label :text {pulse.gpu[0].stats.vram_used.formatted})
+            (label :text {pulse.gpu[0].stats.vram_total.formatted})
+          )
+          (box
+            :halign "start"
+            (bar :class "gpu" :value {pulse.gpu[0].stats.vram_usage.raw})
+          )
+          (box
+            :halign "start"
+            :orientation "v"
+            :class "footer"
+            (box
+              :space-evenly false
+              :spacing 5
+              (label :text "󰈐")
+              (label :text "${pulse.gpu[0].stats.fan_speed}RPM")
+            )
+            (box
+              :space-evenly false
+              :spacing 5
+              (label :text "")
+              (label :text {pulse.gpu[0].stats.temp.junction.formatted})
+            )
+          )
+        )
+      )
+      ; RAM
+      (box
+        :space-evenly false
+        :spacing 5
+        :orientation "v"
+        :class "module ram"
+        (box
+          :halign "end"
+          (label
+            :class "title"
+            :text "RAM"
+          )
+        )
+        (box
+          :space-evenly false
+          :spacing 5
+          :orientation "v"
+          (box
+            :halign "end"
+            :space-evenly false
+            :spacing 10
+            :class "label"
+            (label :text {pulse.mem.ram.used.formatted})
+            (label :text {pulse.mem.ram.total.formatted})
+          )
+          (box
+            :halign "end"
+            (bar :class "ram" :value {pulse.mem.ram.percent.raw})
+          )
+        )
+        (box
+          :halign "start"
+          :orientation "v"
+          :class "footer"
+          :halign "end"
+          (box
+            :halign "end"
+            :space-evenly false
+            :spacing 5
+            (label :text {pulse.mem.swp.used.formatted})
+            (label :text "󰯎")
+          )
+          (box
+            :space-evenly false
+            :spacing 5
+            (label :text {pulse.mem.swp.total.formatted})
+            (label :text "󰯎")
+          )
+        )
+      )
+    )
+  )
+)
+
+
+(defwidget disk_line [mount usage]
+  (box
+    :class "disk-line"
+    :orientation "h"
+    (box
+      :class "mount"
+      :halign "start"
+      (label :text {mount})
+    )
+    (box :halign "end" (bar :class "usage" :value {usage}))
+  )
+)
+
+(defwidget disk []
+  (box
+    :class "cell disk"
+    :orientation "v"
+    :spacing 20
+    (box
+      :space-evenly false
+      :spacing 10
+      :orientation "h"
+      :valign "start"
+      (circular-progress
+        :class "disk-usage"
+        :value {pulse.disk["/dev/sdb2"].partitions["/"].usage.raw}
+        :start-at 25
+        :thickness 10
+        :width 100
+        :height 80
+      )
+      (box
+        :spacing 0
+        :space-evenly false
+        :orientation "v"
+        :valign "center"
+        (box
+          :spacing 10
+          :space-evenly false
+          :halign "start"
+          (box
+            :valign "end"
+            (label :class "free" :text {pulse.disk["/dev/sdb2"].partitions["/"].free.formatted})
+          )
+          (box
+            :valign "end"
+            (label :class "total" :text {pulse.disk["/dev/sdb2"].partitions["/"].total.formatted})
+          )
+        )
+        (box
+          :space-evenly false
+          :spacing 10
+          :halign "start"
+          :class "device"
+          (label :text {pulse.disk["/dev/sdb2"].device})
+        )
+      )
+    )
+    (box
+      :space-evenly false
+      :spacing 5
+      :valign "start"
+      :orientation "v"
+      ; Home
+      (disk_line
+        :mount {pulse.disk["/dev/sdb2"].partitions["/home"].mount_point}
+        :usage {pulse.disk["/dev/sdb2"].partitions["/home"].usage.raw}
+      )
+      
+      ; Other
+      (disk_line
+        :mount {pulse.disk["/dev/sdd2"].partitions["/mnt/sdd2"].mount_point}
+        :usage {pulse.disk["/dev/sdd2"].partitions["/mnt/sdd2"].usage.raw}
+      )
+      (disk_line
+        :mount {pulse.disk["/dev/sda2"].partitions["/mnt/sda2"].mount_point}
+        :usage {pulse.disk["/dev/sda2"].partitions["/mnt/sda2"].usage.raw}
+      )
+    )
+  )
+)
+
+
+(defwidget dashboard []
+  (box
+    :class "dashboard"
+    :orientation "v"
+    :spacing 2
+    :halign "fill"
+    :valign "fill"
+    :space-evenly false
+    (box
+      :orientation "h"
+      :spacing 2
+      :halign "fill"
+      :homogeneous false
+      (card)
+      (weather))
+    (box
+      :orientation "h"
+      :spacing 2
+      :halign "fill"
+      (network)
+      (system)
+      (disk)
+    )
+  )
+)
+
+
+(defwindow dashboard
+  :monitor 1
+  :stacking "bottom"
+  :geometry (geometry
+    :width 700
+    :x "50px"
+    :y "50px"
+  :anchor "center center")
+  (dashboard))

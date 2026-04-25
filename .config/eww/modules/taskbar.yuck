@@ -1,0 +1,196 @@
+(defpoll active
+  :interval 16
+  :initial `hyprctl activeworkspace -j`
+  `hyprctl activeworkspace -j`
+)
+
+; Left
+(defwidget ws_btn [id]
+  (eventbox
+    :cursor "pointer"
+    :onclick "hyprctl dispatch workspace ${id}"
+    (button
+      :onclick "hyprctl dispatch workspace ${id}"
+      :class {active.id == id ? "active" : "inactive"}
+      (label :text {active.id == id ? "" : ""})
+    )
+  )
+)
+
+(defwidget left []
+  (box
+    :class "left"
+    :halign "start"
+    :space-evenly false
+    (ws_btn :id 1)
+    (ws_btn :id 2)
+    (ws_btn :id 3)
+    (ws_btn :id 4)
+    
+    (ws_btn :id 5)
+    (ws_btn :id 6)
+    (ws_btn :id 7)
+    (ws_btn :id 8)
+  )
+)
+
+
+; Center
+(deflisten audio_wave
+  :initial ""
+  "cava -p scripts/config.cava | python scripts/wave.py cava"
+)
+
+(defpoll cover_file
+  :interval 60
+`python scripts/spotify.py --field cover_file`)
+
+
+(defpoll spotify
+  :interval 60
+  :initial `python scripts/spotify.py`
+`python scripts/spotify.py`)
+
+
+(defwidget spotify_control_btn [icon cmd]
+  (eventbox
+    :onclick cmd
+    :cursor "pointer"
+    (button :onclick cmd
+      :class "spotify-control-btn"
+      (label :text icon)
+    )
+  )
+)
+
+(defwindow spotify
+  :class "spotify"
+  :geometry (geometry
+    :x "50%"
+    :y "50px"
+    :width "300px"
+  :anchor "top center")
+  :stacking "bg"
+  :monitor 0
+  :windowtype "dock"
+  :wm-ignore false
+  (box
+    :orientation "horizontal"
+    :spacing 10
+    :space-evenly false
+    :valign "center"
+    :visible {spotify.fetched}
+    (box :style "background-image: url('${cover_file}');" :class "cover" :halign "center")
+    (box
+      :space-evenly false
+      :spacing 10
+      :orientation "vertical"
+      :halign "center"
+      (box
+        :orientation "vertical"
+        :spacing "5px"
+        :space-evenly false
+        :valign "start"
+        :halign "start"
+        (box :class "title" :halign "start" (label :text "${spotify.title}"))
+        (box :class "artist" :halign "start" (label :text "by ${spotify.artist}" :ellipsize "end"))
+      )
+      (box
+        :orientation "horizontal"
+        :spacing 10
+        :space-evenly false
+        :valign "center"
+        :halign "center"
+        (spotify_control_btn :icon "" :cmd "playerctl -p spotify previous")
+        (spotify_control_btn :icon {spotify.playing ? "" : ""} :cmd "playerctl -p spotify play-pause")
+        (spotify_control_btn :icon "" :cmd "playerctl -p spotify next")
+      )
+    )
+  )
+)
+
+(defwidget center []
+  (box
+    :class "center"
+    :halign "center"
+    :spacing 10
+    :space-evenly false
+    :visible {spotify.fetched}
+    (eventbox
+      :cursor "pointer"
+      :onclick "eww open spotify --toggle"
+      (label :text {audio_wave})
+    )
+  )
+)
+
+; Right
+(defwidget right []
+  (box
+    :class "right"
+    :halign "end"
+    :space-evenly false
+    :spacing 20
+    (systray
+      :class "systray"
+      :icon-size 20
+    )
+    (hardware)
+    (clock)
+  )
+)
+
+(defpoll date :interval "1s" :initial `data`  `date`)
+
+(defwidget clock []
+  (box
+    :class "clock"
+    (label
+      :text {date}
+    )
+  )
+)
+
+(defwidget hardware []
+  (box
+    :class "hardware"
+    :spacing 15
+    :space-evenly false
+    (box :spacing 10 :space-evenly false
+      (label :text "󰢮" :style "font-size: 20px")
+      (label :text {pulse.gpu[0].stats.vram_usage.formatted})
+    )
+    (box :spacing 10 :space-evenly false
+      (label :text "󰆼")
+      (label :text {pulse.mem.ram.percent.formatted})
+    )
+    (box :spacing 10 :space-evenly false
+      (label :text "")
+      (label :text {pulse.cpu.usage.formatted})
+    )
+  )
+)
+
+
+(defwindow taskbar
+  :class "taskbar"
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "10px"
+    :anchor "top center"
+  )
+  :stacking "bg"
+  :monitor 0
+  :windowtype "dock"
+  :wm-ignore true
+  :exclusive false
+  :reserve (struts :side "top" :distance "4%")
+  (box
+    (left)
+    (center)
+    (right)
+  )
+)
+

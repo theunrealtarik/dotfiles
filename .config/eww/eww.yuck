@@ -1,0 +1,11 @@
+
+(deflisten pulse
+  :initial "{}"
+  "pulse --refresh cpu:5s gpu:5s mem:5s disk:5m net:1s"
+)
+
+(deflisten hardware :initial "{}" "echo {}")
+
+(include "./modules/powermenu.yuck")
+(include "./modules/taskbar.yuck")
+(include "./modules/dashboard.yuck")

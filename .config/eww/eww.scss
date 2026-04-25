@@ -1,0 +1,332 @@
+$background: #151727;
+$background-alt: #2c182d;
+$foreground: #cadbef;
+$primary: #444f6c;
+$active: #898aa3;
+$hypr-primary: #3b2f4f;
+$hypr-secondary: #444f6c;
+
+$border-radius: 10px;
+$base-padding: 20px;
+
+* {
+  all: unset;
+}
+
+.bar,
+scale trough {
+  all: unset;
+  background-color: rgba($color: $background, $alpha: 0.5);
+  border-radius: $border-radius;
+  min-height: 12px;
+  min-width: 240px;
+}
+
+.bar,
+scale trough highlight {
+  all: unset;
+  border-radius: $border-radius;
+}
+
+.bar scale trough highlight {
+  background-color: $primary;
+}
+
+@mixin powerstyle {
+  background-color: rgba($color: $background, $alpha: 0.1);
+  border: 1px solid $primary;
+  border-radius: $border-radius;
+  padding: $base-padding;
+  // font-family: "JetBrainsMonoNerdFont", monospace;
+  font-family: sans-serif;
+  font-weight: 600;
+}
+
+.powerconfirm {
+  @include powerstyle;
+  color: $foreground;
+  font-size: 16px;
+
+  .confirm-label {
+    padding: $base-padding;
+    font-weight: 600;
+    color: $foreground;
+  }
+
+  .confirm-options {
+    button {
+      padding: $base-padding;
+      font-weight: 600;
+      border-radius: 8px;
+      transition:
+        background-color 0.1s,
+        color 0.1s ease-in-out;
+
+      &:hover {
+        background-color: $primary;
+        color: $background;
+      }
+    }
+  }
+}
+
+.powermenu {
+  @include powerstyle;
+
+  .power-option {
+    border-radius: 8px;
+    &:hover {
+      background-color: rgba($color: $primary, $alpha: 1);
+      color: $background;
+    }
+  }
+
+  .power-button {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 20px;
+    color: $foreground;
+  }
+}
+
+.spotify {
+  font-family: sans-serif;
+  background-color: rgba($color: $background, $alpha: 0.1);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: $border-radius;
+  padding: $base-padding;
+
+  $cover-size: 100px;
+
+  .cover {
+    background-size: $cover-size;
+    min-height: $cover-size;
+    min-width: $cover-size;
+    border-radius: $border-radius - 2px;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: 900;
+    color: $foreground;
+  }
+
+  .artist {
+    font-size: 16px;
+    font-weight: 600;
+    color: $active;
+  }
+}
+
+.taskbar {
+  font-family: sans-serif;
+
+  .left {
+    .active {
+      // background-color: $primary;
+    }
+
+    .inactive {
+      &:hover {
+        // background-color: $background;
+        color: $active;
+      }
+    }
+
+    .active,
+    .inactive {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0px 15px;
+      color: $foreground;
+      transition:
+        background-color 0.1s,
+        color 0.1s ease-in-out;
+    }
+  }
+
+  .center {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .right {
+    .clock {
+      font-weight: 600;
+      padding: $base-padding;
+    }
+  }
+}
+
+// dashboard
+
+.dashboard {
+  .cell {
+    border-radius: $border-radius;
+    background-color: rgba($color: $background, $alpha: 0.2);
+  }
+
+  .card {
+    .uptime {
+      padding: $base-padding;
+      font-size: 18px;
+      font-weight: bold;
+      color: $foreground;
+      opacity: 0.5;
+    }
+
+    .card-img {
+      background-size: 420px;
+      min-height: 200px;
+      min-width: 420px;
+      border-radius: $border-radius;
+    }
+  }
+
+  .weather {
+    padding: $base-padding;
+    .top {
+      font-size: 52px;
+      font-weight: 900;
+      color: $foreground;
+    }
+
+    .date,
+    .stat {
+      font-size: 16px;
+      font-weight: 600;
+      color: $active;
+    }
+
+    .quote {
+      font-size: 16px;
+      opacity: 0.8;
+      padding-top: 20px;
+    }
+  }
+
+  .network {
+    padding: $base-padding;
+    color: $foreground;
+
+    .icon {
+      font-size: 36px;
+    }
+
+    .ssid {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .ip {
+      opacity: 0.8;
+      font-size: 32px;
+      font-weight: 900;
+    }
+    .stats {
+      font-size: 14px;
+      color: $foreground;
+      opacity: 0.8;
+    }
+  }
+}
+
+.system {
+  padding: $base-padding / 2;
+  color: $foreground;
+  .module {
+    .title {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .info {
+      font-weight: bold;
+    }
+
+    .icon {
+      font-size: 24px;
+    }
+
+    .footer {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+  }
+
+  .cpu {
+    .load-icon {
+      opacity: 0.5;
+      font-weight: bold;
+    }
+
+    .load-value {
+      font-weight: bold;
+    }
+
+    .cores {
+      font-size: 21px;
+    }
+  }
+
+  .ram,
+  .gpu {
+    scale trough {
+      min-width: 120px;
+    }
+
+    .label {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+}
+
+.disk {
+  padding: $base-padding / 2;
+
+  .disk-usage {
+    all: unset;
+    color: $active;
+    background-color: rgba($color: $active, $alpha: 0.05);
+    border-radius: $border-radius;
+    padding: $base-padding;
+  }
+
+  .disk-line {
+    .mount {
+      color: $active;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    scale trough {
+      min-width: 80px;
+    }
+  }
+
+  .free,
+  .total {
+    font-weight: bold;
+  }
+
+  .free {
+    color: $foreground;
+    font-size: 24px;
+  }
+
+  .total {
+    color: $active;
+    font-size: 12px;
+    padding-bottom: 3px;
+  }
+
+  .device {
+    color: $active;
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}

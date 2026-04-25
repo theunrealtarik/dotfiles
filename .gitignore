@@ -1,0 +1,11 @@
+.vscode
+.github
+.pallete
+lazy-lock.json
+**/**/*.css.map
+**/*/__pycache__
+**/*/node_modules
+**/*/bun.lock
+**/*/.env
+.config/spotify/prefs
+.config/spotify/Users
