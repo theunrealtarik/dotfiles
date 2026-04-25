@@ -63,7 +63,7 @@ source "$HOME/.cargo/env.fish"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # node
-bass source $HOME/.nvm/nvm.sh --no-use
+# bass source $HOME/.nvm/nvm.sh --no-use
 if type -q nvm
     nvm use latest --silent
 end
