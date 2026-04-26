@@ -26,7 +26,7 @@
     (ws_btn :id 2)
     (ws_btn :id 3)
     (ws_btn :id 4)
-    
+
     (ws_btn :id 5)
     (ws_btn :id 6)
     (ws_btn :id 7)
@@ -115,10 +115,9 @@
     :halign "center"
     :spacing 10
     :space-evenly false
-    :visible {spotify.fetched}
     (eventbox
       :cursor "pointer"
-      :onclick "eww open spotify --toggle"
+      :onclick {spotify.fetched ? "eww open spotify --toggle" : ""}
       (label :text {audio_wave})
     )
   )
@@ -193,4 +192,3 @@
     (right)
   )
 )
-
