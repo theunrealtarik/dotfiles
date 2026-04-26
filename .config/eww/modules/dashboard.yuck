@@ -122,7 +122,7 @@
     :spacing 10
     (box
       :space-evenly false
-      (label :class "icon" :text {pulse.net.default.connection == "Wired" ? "󰈀 " : " "})
+      (label :class "icon" :text {pulse.net.default.connection == "wired" ? "󰈀 " : " "})
       (box
         :class "ip"
         :space-evenly false
@@ -427,7 +427,7 @@
       :space-evenly false
       :spacing 5
       :valign "start"
-      :orientation "v" 
+      :orientation "v"
       ; Other
       (disk_line
         :mount {pulse.disk["/dev/sdc1"].partitions["/mnt/sdc1"].mount_point}
