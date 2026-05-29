@@ -38,8 +38,9 @@
 ; Center
 (deflisten audio_wave
   :initial ""
-  "cava -p scripts/config.cava | python scripts/wave.py cava"
+  "cava -p scripts/config.cava | wave --max 8"
 )
+
 
 (defpoll cover_file
   :interval 60
@@ -115,6 +116,7 @@
     :halign "center"
     :spacing 10
     :space-evenly false
+    :visible {spotify.fetched}
     (eventbox
       :cursor "pointer"
       :onclick {spotify.fetched ? "eww open spotify --toggle" : ""}
