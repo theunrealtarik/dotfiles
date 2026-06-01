@@ -96,7 +96,7 @@ def fetch_weather() -> Optional[dict]:
 
     url = f"http://api.openweathermap.org/data/2.5/weather?APPID={ENV_API_KEY}&id={ENV_CITY_ID}&units=metric"
     response = requests.get(url)
-    print(url)
+
     if response.status_code == 200:
         data = response.json()
         data["timestamp"] = time.time()
@@ -157,8 +157,11 @@ if __name__ == "__main__":
     if args.fetch:
         format_data()
     else:
-        json = json.loads(read(PATH_WEATHER_CACHE_FMT))
-        data = Data(**json)
+        if not PATH_WEATHER_CACHE_FMT.exists():
+            format_data()
+
+        data = Data(**json.loads(read(PATH_WEATHER_CACHE_FMT)))
+
         if args.icon:
             print(data.icon)
         elif args.temp:

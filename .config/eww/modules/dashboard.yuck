@@ -40,6 +40,7 @@
 
 (defpoll refresh_weather_data
   :interval "35m"
+  :initial `python scripts/weather.py --fetch`
   `python scripts/weather.py --fetch`
 )
 
@@ -104,11 +105,6 @@
       (label :text {weather_quote})
     )
   )
-)
-
-(defpoll net
-  :interval "1s"
-  `python scripts/net.py`
 )
 
 
