@@ -194,8 +194,8 @@
 )
 
 (deflisten core_wave
-  :initial "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
-  `pulse --only cpu --refresh cpu:15s | jq -c '[.cpu.cores[].raw]' | python scripts/wave.py cores`
+    :initial "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
+    `pulse --only cpu --refresh cpu:15s | jq -c '[.cpu.cores[].raw] | map(floor) | join(";")' | wave --max 16`
 )
 
 (defwidget system []
