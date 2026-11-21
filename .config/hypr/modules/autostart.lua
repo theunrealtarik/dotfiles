@@ -1,0 +1,12 @@
+hl.on("hyprland.start", function()
+    hl.dispatch(hl.dsp.focus({ workspace = 1 }))
+
+    hl.exec_cmd("hyprpaper")
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.exec_cmd("eww daemon")
+    hl.exec_cmd("eww open taskbar")
+    hl.exec_cmd("eww open dashboard")
+    hl.exec_cmd("eww reload")
+end)
